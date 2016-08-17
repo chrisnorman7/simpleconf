@@ -3,11 +3,11 @@ This module contains the Option class. This class should be used to define optio
 """
 
 from inspect import isclass
-from .validators import Validator
+from .validators import String
 
 class Option(object):
  """An option within a section."""
- def __init__(self, default, validator = Validator, title = None, control = None):
+ def __init__(self, default, validator = String, title = None, control = None):
   """
   Initialise the option.
   
