@@ -15,9 +15,10 @@ class Section(object):
  Sections can be stacked to sort configuration options more intuatively.
  """
  
+ option_order = []
  filename = None
  parent = None
- title = None
+ title = 'Untitled Section'
  
  @property
  def sections(self):
@@ -51,6 +52,10 @@ class Section(object):
    self.title = title
   self._sections = {} # a dictionary of name: section pairs.
   self._options = {}
+  if self.option_order:
+   option_order = self.option_order
+  else: # The user didn't specify an order.
+   option_order = []
   for name in dir(self):
    if name.startswith('_'):
     continue # Don't want to mess with __class__.
@@ -59,10 +64,13 @@ class Section(object):
     thing.section = self
     thing.name = name
     self._options[name] = thing
+    if not self.option_order:
+     option_order.append(thing)
    elif isclass(thing) and issubclass(thing, Section):
     thing = thing(parent = self)
     self._sections[name] = thing
     setattr(self, name, thing)
+  self.option_order = option_order
   try:
    self.load()
   except NoFileError:
@@ -157,7 +165,7 @@ class Section(object):
  def __setitem__(self, option, value):
   """Set self[option] = value."""
   if option in self._options:
-   self._options[option].value = value
+   self._options[option].set(value)
   else:
    raise NoOptionError(option, self)
  

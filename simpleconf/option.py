@@ -14,7 +14,7 @@ class Option(object):
   default - The default value for this option.
   validator - The validator which the option will be checked against.
   title - The friendly name for this option which will show up in any GUI.
-  control - The control which should be used to set the value of this control.
+  control - The control which should be used to set the value of this control (called as control(option, window).
   """
   self.section = None # The section this option is a member of.
   self.name = None # The name of this option. Set when the section is initialised.
@@ -26,6 +26,10 @@ class Option(object):
   self.value = default # The user-defined value for this option.
   self.title = title
   self.control = control
+ 
+ def set(self, value):
+  """Set self.value = value."""
+  self.value = value
  
  def check(self):
   return self.validator.validate(self)
