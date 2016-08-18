@@ -9,6 +9,8 @@ from wx.lib.sized_controls import SizedFrame
 from wx.lib.agw.floatspin import FloatSpin
 from wx.lib.intctrl import IntCtrl
 from wxgoodies.keys import add_accelerator
+from collections import OrderedDict
+from ..validators import ValidationError
 
 class SimpleConfWxDialog(SizedFrame):
  """A dialog for displaying simpleconf sections."""
@@ -22,7 +24,7 @@ class SimpleConfWxDialog(SizedFrame):
  def __init__(self, section):
   """Construct a frame from the provided section."""
   self.section = section
-  self.controls = {} # name:control pairs for all the controls on this form.
+  self.controls = OrderedDict() # name:control pairs for all the controls on this form.
   super(SimpleConfWxDialog, self).__init__(None, title = section.title)
   add_accelerator(self, 'ESCAPE', lambda event: self.Close(True))
   self.panel = self.GetContentsPane()
@@ -35,7 +37,7 @@ class SimpleConfWxDialog(SizedFrame):
       c = control(option, self)
       break
     else:
-     raise TypeError('No appropriate control found for option %s with value %s.' % (o, option.value))
+     raise TypeError('No appropriate control found for option %s with value %s.' % (option.name, option.value))
    else:
     c = option.control(option, self)
    try:
@@ -49,6 +51,20 @@ class SimpleConfWxDialog(SizedFrame):
   self.cancel = wx.Button(self.panel, label = '&Cancel')
   self.cancel.Bind(wx.EVT_BUTTON, lambda event: self.Close(True))
  
+ def on_error(self, message, title = 'Error', style = wx.ICON_EXCLAMATION):
+  """Display an error message."""
+  wx.MessageBox(message, title, style)
+ 
  def on_ok(self, event):
   """The OK button was pressed."""
-  self.Close(True)
+  for option in self.section.option_order:
+   control = self.controls[option.name]
+   option.set(control.GetValue())
+   try:
+    option.check()
+   except ValidationError as e:
+    self.on_error(e.message)
+    control.SetFocus()
+    break
+  else:
+   self.Close(True)
