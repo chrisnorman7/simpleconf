@@ -13,10 +13,10 @@ from wxgoodies.keys import add_accelerator
 class SimpleConfWxDialog(SizedFrame):
  """A dialog for displaying simpleconf sections."""
  control_types = {
-  bool: wx.CheckBox,
-  int: IntCtrl,
-  six.string_types: wx.TextCtrl,
-  float: lambda panel: FloatSpin(panel, digits = 2)
+  bool: lambda option, window: wx.CheckBox(window.panel),
+  int: lambda option, window: IntCtrl(window.panel),
+  six.string_types: lambda window, option: wx.TextCtrl(window.panel),
+  float: lambda option, window: FloatSpin(window.panel, digits = 2, name = option.get_title())
  }
  
  def __init__(self, section):
@@ -32,7 +32,7 @@ class SimpleConfWxDialog(SizedFrame):
    if option.control is None:
     for type, control in self.control_types.items():
      if isinstance(option.value, type):
-      c = control(self.panel)
+      c = control(option, self)
       break
     else:
      raise TypeError('No appropriate control found for option %s with value %s.' % (o, option.value))

@@ -24,6 +24,7 @@ class Config(Section):
   width = Option(1024, title = 'Screen &Width', validator = validators.Integer(min = 0))
   height = Option(768, title = 'Screen &Height', validator = validators.Integer(min = 0))
   opacity = Option(1.0, title = 'Screen &Opacity', validator = validators.Float(min = 0.0, max = 5.0))
+  option_order = [width, height, opacity]
 
 config = Config()
 
