@@ -17,7 +17,7 @@ class SimpleConfWxDialog(SizedFrame):
  control_types = {
   bool: lambda option, window: wx.CheckBox(window.panel),
   int: lambda option, window: IntCtrl(window.panel),
-  six.string_types: lambda window, option: wx.TextCtrl(window.panel),
+  six.string_types: lambda option, window: wx.TextCtrl(window.panel),
   float: lambda option, window: FloatSpin(window.panel, digits = 2, name = option.get_title())
  }
  
@@ -68,3 +68,4 @@ class SimpleConfWxDialog(SizedFrame):
     break
   else:
    self.Close(True)
+   return True # Signal to any overriding methods that we exited correctly.

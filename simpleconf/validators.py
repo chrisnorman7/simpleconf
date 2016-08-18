@@ -53,7 +53,7 @@ class RestrictedString(String):
   self.min = min
   self.max = max
  
- def plurify(self, value, single, plural = None):
+ def pluralise(self, value, single, plural = None):
   """Get a string with the proper pluralisation."""
   if plural is None:
    plural = single + 's'

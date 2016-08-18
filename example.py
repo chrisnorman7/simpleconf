@@ -14,7 +14,7 @@ class Config(Section):
   """Login configuration."""
   title = 'Login Configuration'
   username = Option('test', title = '&Username')
-  password = Option('password123', title = '&Password', control = lambda option, window: wx.TextCtrl(window.panel, style = wx.TE_PASSWORD))
+  password = Option('password123', title = '&Password', control = lambda option, window: wx.TextCtrl(window.panel, style = wx.TE_PASSWORD), validator = validators.RestrictedString(min = 5))
   remember = Option(True, title = '&Remember Credentials', validator = validators.Boolean)
   option_order = [username, password, remember]
  
