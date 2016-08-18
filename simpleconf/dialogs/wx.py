@@ -47,6 +47,7 @@ class SimpleConfWxDialog(SizedFrame):
    c.SetValue(option.value)
    self.controls[option.name] = c
   self.ok = wx.Button(self.panel, label = '&OK')
+  self.ok.SetDefault()
   self.ok.Bind(wx.EVT_BUTTON, self.on_ok)
   self.cancel = wx.Button(self.panel, label = '&Cancel')
   self.cancel.Bind(wx.EVT_BUTTON, lambda event: self.Close(True))
