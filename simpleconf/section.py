@@ -19,6 +19,7 @@ class Section(object):
  filename = None
  parent = None
  title = 'Untitled Section'
+ visible = True # Use this to hide system configuration.
  
  @property
  def sections(self):

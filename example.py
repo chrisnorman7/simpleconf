@@ -39,7 +39,8 @@ class ConfigFrame(SizedFrame):
   p.SetSizerType('form')
   for s in config.sections:
    section = getattr(config, s)
-   wx.Button(p, label = '&%s' % section.title).Bind(wx.EVT_BUTTON, lambda event, section = section: WXDLG(section).Show(True))
+   if section.visible:
+    wx.Button(p, label = '&%s' % section.title).Bind(wx.EVT_BUTTON, lambda event, section = section: WXDLG(section).Show(True))
 
 # Now for showing the actual dialog:
 if __name__ == '__main__':
