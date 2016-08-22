@@ -14,12 +14,11 @@ from ..validators import ValidationError
 
 class SimpleConfWxDialog(SizedFrame):
  """A dialog for displaying simpleconf sections."""
- control_types = {
-  bool: lambda option, window: wx.CheckBox(window.panel),
-  int: lambda option, window: IntCtrl(window.panel),
-  six.string_types: lambda option, window: wx.TextCtrl(window.panel),
-  float: lambda option, window: FloatSpin(window.panel, digits = 2, name = option.get_title())
- }
+ control_types = OrderedDict()
+ control_types[bool] = lambda option, window: wx.CheckBox(window.panel)
+ control_types[int] = lambda option, window: IntCtrl(window.panel)
+ control_types[six.string_types] = lambda option, window: wx.TextCtrl(window.panel)
+ control_types[float] = lambda option, window: FloatSpin(window.panel, digits = 2, name = option.get_title())
  
  def __init__(self, section):
   """Construct a frame from the provided section."""

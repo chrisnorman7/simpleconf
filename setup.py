@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
  name = 'simpleconf',
- version = '0.0.0',
+ version = '0.0.1',
  description = 'The last configuration manager I will ever write (hopefully).',
  url = 'http://github.com/chrisnorman7/simpleconf.git',
  author = 'Chris Norman',
