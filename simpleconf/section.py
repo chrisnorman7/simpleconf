@@ -123,11 +123,14 @@ class Section(object):
   for name, section in self._sections.items():
    sections[name] = section.json()
   for name, option in self._options.items():
-   options[name] = option.value
-  return dict(
-   sections = sections,
-   options = options
-  )
+   if option.value != option.default:
+    options[name] = option.value
+  stuff = {}
+  if sections:
+   stuff['sections'] = sections
+  if options:
+   stuff['options'] = options
+  return stuff
  
  def write(self, **kwargs):
   """Write this section to disk if filename is provided."""
