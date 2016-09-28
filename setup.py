@@ -1,8 +1,10 @@
 from setuptools import setup
 
+from simpleconf import __version__
+
 setup(
  name = 'simpleconf',
- version = '0.0.2',
+ version = __version__,
  description = 'The last configuration manager I will ever write (hopefully).',
  url = 'http://github.com/chrisnorman7/simpleconf.git',
  author = 'Chris Norman',
