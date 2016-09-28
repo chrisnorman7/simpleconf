@@ -116,14 +116,16 @@ class Section(object):
    for s in self.children:
     s.restore(True)
  
- def json(self):
-  """Return this section as a dictionary."""
+ def json(self, full = False):
+  """Return this section as a dictionary If full evaluates to True, dump everything, not just anything that has changed."""
   sections = {}
   options = {}
   for name, section in self._sections.items():
-   sections[name] = section.json()
+   j = section.json()
+   if j or full:
+    sections[name] = j
   for name, option in self._options.items():
-   if option.value != option.default:
+   if option.value != option.default or full:
     options[name] = option.value
   stuff = {}
   if sections:

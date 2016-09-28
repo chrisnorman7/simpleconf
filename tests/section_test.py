@@ -42,7 +42,7 @@ def test_attributes():
 
 def test_dump():
  """Test reading and writing dumps."""
- j = user.json()
+ j = user.json(full = True)
  assert isinstance(j, dict)
  assert len(list(j.keys())) == 2
  assert 'options' in j
