@@ -1,0 +1,18 @@
+CHANGES
+=======
+
+* Fixed an oversite in tests and a bug which meant TypeError was raised instead of NoOptionError
+* Now extract version from simpleconf itself
+* Added full argument to Section.json to make minimal dump optional
+* Now only dump what is necessary
+* Now use an OrderedDict for control_types
+* Made the OK button the default button in SimpleConfWxDialog
+* Made SimpleConfWXDialog.on_ok return True to signify success
+* Add a visible attribute to Section objects
+* Added validation to SimpleConfWXDialog
+* Made SimpleConfWXDialog.control_types more extensible
+* Added setup.py
+* Added a wx dialog and example (incomplete)
+* Use String as the default validator
+* Backend now works
+* Initial commit
