@@ -55,27 +55,35 @@ class Section(object):
   self._options = {}
   if self.option_order:
    option_order = self.option_order
-  else: # The user didn't specify an order.
+  else: # The user didn't specify an order. Infer.
    option_order = []
   for name in dir(self):
    if name.startswith('_'):
     continue # Don't want to mess with __class__.
    thing = getattr(self, name)
    if isinstance(thing, Option):
-    thing.section = self
-    thing.name = name
-    self._options[name] = thing
+    self.add_option(name, thing)
     if not self.option_order:
      option_order.append(thing)
    elif isclass(thing) and issubclass(thing, Section):
     thing = thing(parent = self)
-    self._sections[name] = thing
-    setattr(self, name, thing)
+    self.add_section(name, thing)
   self.option_order = option_order
   try:
    self.load()
   except NoFileError:
    pass # There is no filename.
+ 
+ def add_option(self, name, thing):
+  """Add thing as an option named name of this section."""
+  thing.section = self
+  thing.name = name
+  self._options[name] = thing
+ 
+ def add_section(self, name, thing):
+  """Add thing as a subsection named name of this section."""
+  self._sections[name] = thing
+  setattr(self, name, thing)
  
  def load(self):
   """Load configuration from disk."""
@@ -166,7 +174,11 @@ class Section(object):
   if option in self._options:
    return self._options[option].value
   else:
-   raise NoOptionError((option, self))
+   if hasattr(self, option):
+    o = getattr(self, option)
+    if isinstance(o, Option):
+     self._options
+   raise NoOptionError(option, self)
  
  def __setitem__(self, option, value):
   """Set self[option] = value."""

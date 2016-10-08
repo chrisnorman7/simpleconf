@@ -1,6 +1,5 @@
 """Test exceptions."""
 
-from pytest import raises
 from simpleconf import exceptions
 
 def test_message():
@@ -10,4 +9,4 @@ def test_message():
  message = 'testing'
  assert str(exceptions.SimpleConfError(message)) == message
  assert exceptions.ValidationError(message).message is message
- assert exceptions.DataMissingError('test').message == 'Missing data: test.'
+ assert exceptions.DataMissingError('test').message == 'test'

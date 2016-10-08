@@ -17,16 +17,17 @@ class ValidationError(SimpleConfError):
  """Validation error."""
 
 class DataMissingError(SimpleConfError):
- """Missing data: %s."""
- def __init__(self, data):
-  """Include data and it will be filled in from the doc string of the class."""
-  super(DataMissingError, self).__init__(self.__doc__ % data)
+ """Missing data."""
 
 class NoSectionError(DataMissingError):
  """No section named %s on section %s."""
+ def __init__(self, option, section):
+  return super(NoSectionError, self).__init__(self.__doc__ % (option, section))
 
 class NoOptionError(DataMissingError):
  """No option named %s on section %s."""
+ def __init__(self, option, section):
+  return super(NoOptionError, self).__init__(self.__doc__ % (option, section))
 
 class NoFileError(SimpleConfError):
  """No file was provided."""
