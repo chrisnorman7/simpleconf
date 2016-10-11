@@ -42,7 +42,7 @@ class Option(object):
   return self.name if self.title is None else self.title
  
  def __str__(self):
-  return self.name
+  return self.get_title()
  
  def __repr__(self):
   return '{0.__class__.__name__}(name = {0.name}, title = {0.title}, value = {0.value}, default = {0.default}, section = {0.section}, validator = {0.validator})'.format(self)

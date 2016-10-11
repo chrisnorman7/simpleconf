@@ -21,3 +21,8 @@ def test_nonexisting():
  c = Section()
  with raises(exceptions.NoOptionError):
   c['nothing'] = 4
+
+def test___str__():
+ name = 'Testing'
+ o = Option('whatever', title = name)
+ assert o.get_title() == name
