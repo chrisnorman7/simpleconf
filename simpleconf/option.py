@@ -19,9 +19,8 @@ class Option(object):
   self.section = None # The section this option is a member of.
   self.name = None # The name of this option. Set when the section is initialised.
   if isclass(validator):
-   self.validator = validator()
-  else:
-   self.validator = validator
+   validator = validator()
+  self.validator = validator
   self.default = default
   self.value = default # The user-defined value for this option.
   self.title = title
@@ -43,4 +42,7 @@ class Option(object):
   return self.name if self.title is None else self.title
  
  def __str__(self):
-  return '%s: %s' % (self.name, self.value)
+  return self.name
+ 
+ def __repr__(self):
+  return '{0.__class__.__name__}(name = {0.name}, title = {0.title}, value = {0.value}, default = {0.default}, section = {0.section}, validator = {0.validator})'.format(self)
