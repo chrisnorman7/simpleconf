@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+* Reduced extra data from setup.cfg
 * Switched to using pbr for setup
 * Fixed an oversite in tests and a bug which meant TypeError was raised instead of NoOptionError
 * Now extract version from simpleconf itself

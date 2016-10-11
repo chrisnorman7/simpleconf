@@ -76,12 +76,21 @@ class Section(object):
  
  def add_option(self, name, thing):
   """Add thing as an option named name of this section."""
+  if not isinstance(thing, Option):
+   raise TypeError('Option %s (%r) is not of type Option.' % (name, thing))
+  if hasattr(self, name) and not (getattr(self, name) is thing or (isclass(getattr(self, name)) and isinstance(thing, getattr(self, name)))):
+   raise AttributeError('There is already an attribute named %s on section %r.' % (name, self))
   thing.section = self
   thing.name = name
   self._options[name] = thing
+  setattr(self, name, thing)
  
  def add_section(self, name, thing):
   """Add thing as a subsection named name of this section."""
+  if not isinstance(thing, Section):
+   raise TypeError('Section %s (%r) is not of type Section.' % (name, thing))
+  if hasattr(self, name) and not (getattr(self, name) is thing or (isclass(getattr(self, name)) and isinstance(thing, getattr(self, name)))):
+   raise AttributeError('There is already an attribute named %s on section %r.' % (name, self))
   self._sections[name] = thing
   setattr(self, name, thing)
  
@@ -188,4 +197,7 @@ class Section(object):
    raise NoOptionError(option, self)
  
  def __str__(self):
-  return 'Sections:%s\nOptions:%s' % (self.sections, self.options)
+  return self.title
+ 
+ def __repr__(self):
+  return '{0.__class__.__name__}(title = {0.title}, sections = {0.sections}, options = {0.options}, option_order = {0.option_order})'.format(self)

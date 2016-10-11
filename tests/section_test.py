@@ -69,3 +69,29 @@ def test_validate():
  assert user.validate() == {}
  user['name'] = 5
  assert 'name' in user.validate()
+
+def test___str__():
+ name = 'Testing 1, 2, 3.'
+ c = Section(title = name)
+ assert c.title == name
+
+def test_add_section():
+ c = Section()
+ s = Section()
+ c.add_section('test', s)
+ assert c.test is s
+ with raises(TypeError):
+  c.add_section('testing', 'Not a Section.')
+ with raises(AttributeError): # Already an attribute named 'test'.
+  c.add_section('test', Section())
+
+def test_add_option():
+ c = Section()
+ o = Option('default')
+ c.add_option('test', o)
+ assert c.test is o
+ assert c['test'] == o.value
+ with raises(TypeError):
+  c.add_option('testing', 'Not an Option.')
+ with raises(AttributeError):
+  c.add_option('test', Option('Already got an attribute named test.'))
