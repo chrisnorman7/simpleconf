@@ -36,13 +36,14 @@ class Section(object):
   """Return options as a list of names."""
   return list(self._options.keys())
  
- def __init__(self, filename = None, parent = None, title = None, **kwargs):
+ def __init__(self, filename = None, parent = None, title = None, load = True, **kwargs):
   """
   Initialise the section.
   
   filename - Where this section should load it's data from (if anywhere).
   parent - The parent of this section.
   title - The friendly name of this section (will be used as the window title).
+  load - If True, load when all sections and options have been added.
   kwargs - The initial options and values.
   """
   if filename is not None:
@@ -69,10 +70,11 @@ class Section(object):
     thing = thing(parent = self)
     self.add_section(name, thing)
   self.option_order = option_order
-  try:
-   self.load()
-  except NoFileError:
-   pass # There is no filename.
+  if load:
+   try:
+    self.load()
+   except NoFileError:
+    pass # There is no filename.
  
  def add_option(self, name, thing):
   """Add thing as an option named name of this section."""

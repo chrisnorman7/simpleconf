@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+* Refined Option.__str__
+* Saved a line of code and added a __repr__ method to Option
 * Add more tests and have stricter type-checking
 * Reduced extra data from setup.cfg
 * Switched to using pbr for setup
