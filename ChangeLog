@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+* Added a QuickValidator class which can be passed a lambda to restore old confmanager functionality
+* Added a load argument to Section.__init__ so that loading can be surpressed
 * Refined Option.__str__
 * Saved a line of code and added a __repr__ method to Option
 * Add more tests and have stricter type-checking

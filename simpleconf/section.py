@@ -154,7 +154,7 @@ class Section(object):
   return stuff
  
  def write(self, **kwargs):
-  """Write this section to disk if filename is provided."""
+  """Write this section to disk if filename is provided. Pass all kwargs to json.dump."""
   if self.filename is None:
    raise NoFileError()
   if isinstance(self.filename, six.string_types):
