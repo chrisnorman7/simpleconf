@@ -76,8 +76,8 @@ class Section(object):
    except NoFileError:
     pass # There is no filename.
  
- def add_option(self, name, thing):
-  """Add thing as an option named name of this section."""
+ def add_option(self, name, thing, include = False):
+  """Add thing as an option named name of this section. If include is True, add thing to option_order as well."""
   if not isinstance(thing, Option):
    raise TypeError('Option %s (%r) is not of type Option.' % (name, thing))
   if hasattr(self, name) and not (getattr(self, name) is thing or (isclass(getattr(self, name)) and isinstance(thing, getattr(self, name)))):
@@ -86,6 +86,8 @@ class Section(object):
   thing.name = name
   self._options[name] = thing
   setattr(self, name, thing)
+  if include:
+   self.option_order.append(thing)
  
  def add_section(self, name, thing):
   """Add thing as a subsection named name of this section."""

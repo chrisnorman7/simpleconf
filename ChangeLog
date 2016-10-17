@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+* Updated the docstring for Section.write
 * Added a QuickValidator class which can be passed a lambda to restore old confmanager functionality
 * Added a load argument to Section.__init__ so that loading can be surpressed
 * Refined Option.__str__

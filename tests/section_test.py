@@ -89,9 +89,14 @@ def test_add_option():
  c = Section()
  o = Option('default')
  c.add_option('test', o)
+ assert o not in c.option_order
  assert c.test is o
  assert c['test'] == o.value
  with raises(TypeError):
   c.add_option('testing', 'Not an Option.')
  with raises(AttributeError):
   c.add_option('test', Option('Already got an attribute named test.'))
+ o = Option('')
+ c.add_option('include', o, include = True)
+ assert o in c.option_order
+ assert c.include is o
