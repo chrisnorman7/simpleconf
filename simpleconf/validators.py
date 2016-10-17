@@ -102,3 +102,20 @@ class Option(Validator):
   """Check that option.value is in self.options."""
   if option.value not in self.options:
    raise ValidationError('%s is not in %s.' % (option.value, self.options))
+
+class QuickValidator(Validator):
+ """Quickly add a new validator."""
+ def __init__(self, func):
+  """
+  The validate method will use func to check the data against.
+  
+  If it returns None, the data is assumed to be OK.
+  
+  Any other value will be turned into a ValidationError via str.
+  """
+  self.func = func
+ 
+ def validate(self, option):
+  res = self.func(option)
+  if res is not None:
+   raise ValidationError(str(res))
