@@ -1,20 +1,19 @@
 """Test validators."""
 
 from simpleconf import validators, Option
-from pytest import raises
+from inspect import isclass
+from warnings import warn
 
-def test_quick_validator():
- """Test the QuickValidator class."""
- o = Option('http://www.google.com', title = '&URL', validator = validators.QuickValidator(lambda option: None if '://' in option.value else '%s does not look like a proper URL.' % option.value))
- assert o.check() is None
- with raises(validators.ValidationError):
-  o.value = 'not a valid URL'
-  o.check()
-
-def test_regexp_validator():
- """Test RegexpValidator."""
- o = Option('1234asdf', validator = validators.RegexpString(r'[\d]+[a-z]+'))
- assert o.check() is None
- o.value = ''
- with raises(validators.ValidationError):
-  o.check()
+def test_validators():
+ """Test all validators using their test methods."""
+ o = Option('')
+ for x in dir(validators):
+  validator = getattr(validators, x)
+  if isclass(validator) and issubclass(validator, validators.Validator) and validator is not validators.Validator:
+   validator = validator()
+   o.validator = validator
+   try:
+    validator.test(o)
+   except Exception as e:
+    warn('Exception found in method test of %r.' % validator)
+    raise 
