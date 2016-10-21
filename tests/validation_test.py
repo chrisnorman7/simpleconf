@@ -10,3 +10,11 @@ def test_quick_validator():
  with raises(validators.ValidationError):
   o.value = 'not a valid URL'
   o.check()
+
+def test_regexp_validator():
+ """Test RegexpValidator."""
+ o = Option('1234asdf', validator = validators.RegexpString(r'[\d]+[a-z]+'))
+ assert o.check() is None
+ o.value = ''
+ with raises(validators.ValidationError):
+  o.check()
