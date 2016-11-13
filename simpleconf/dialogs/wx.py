@@ -20,11 +20,11 @@ class SimpleConfWxDialog(SizedFrame):
  control_types[six.string_types] = lambda option, window: wx.TextCtrl(window.panel)
  control_types[float] = lambda option, window: FloatSpin(window.panel, digits = 2, name = option.get_title())
  
- def __init__(self, section):
+ def __init__(self, section, parent = None):
   """Construct a frame from the provided section."""
   self.section = section
   self.controls = OrderedDict() # name:control pairs for all the controls on this form.
-  super(SimpleConfWxDialog, self).__init__(None, title = section.title)
+  super(SimpleConfWxDialog, self).__init__(parent, title = section.title)
   add_accelerator(self, 'ESCAPE', lambda event: self.Close(True))
   self.panel = self.GetContentsPane()
   self.panel.SetSizerType('Form')
