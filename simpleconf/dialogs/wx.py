@@ -40,8 +40,9 @@ class SimpleConfWxDialog(SizedFrame):
    else:
     c = option.control(option, self)
    try:
-    c.SetLabel(option.get_title())
-   except (AttributeError, ValueError):
+    if not isinstance(c, IntCtrl):
+     c.SetLabel(option.get_title())
+   except (AttributeError, NameError):
     pass # Not possible with this control.
    c.SetValue(option.value)
    self.controls[option.name] = c

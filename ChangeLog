@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+* Woops..
+* Really fixed the bug this time
+* Fixed a bug where setting values would not work with specific controls
 * Bumped the version
 * Each validator now has it's own test method which is ran by the test suite
 * Added regexp, list and dictionary validators
