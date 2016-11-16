@@ -43,7 +43,10 @@ class SimpleConfWxDialog(SizedFrame):
     c.SetLabel(option.get_title())
    except AttributeError:
     pass # Not possible with this control.
-   c.SetValue(option.value)
+   try:
+    c.SetValue(option.value)
+   except ValueError:
+    pass # Some control types use SetValue for other stuff.
    self.controls[option.name] = c
   self.ok = wx.Button(self.panel, label = '&OK')
   self.ok.SetDefault()

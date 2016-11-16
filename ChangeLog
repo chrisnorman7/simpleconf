@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+* Bumped the version
+* Each validator now has it's own test method which is ran by the test suite
 * Added regexp, list and dictionary validators
 * Now add option to option_order if inclue is True
 * Updated the docstring for Section.write
