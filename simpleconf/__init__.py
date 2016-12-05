@@ -12,7 +12,7 @@ from .section import Section
 from .option import Option
 from . import exceptions, validators
 
-__version__ = '0.2.2'
+__version__ = '1.0.0'
 
 __all__ = [
  'Section',
