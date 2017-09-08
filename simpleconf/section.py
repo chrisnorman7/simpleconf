@@ -6,7 +6,7 @@ import os
 import os.path
 import six
 from inspect import isclass
-from json import loads, dump
+from json import loads, dumps
 from attr import attrs
 from .option import Option
 from .exceptions import NoSectionError, NoOptionError, NoFileError, \
@@ -19,6 +19,14 @@ class Section:
     A configuration section.
 
     Sections can be stacked to sort configuration options more intuatively.
+
+    Loader and dumper are responsible for loading and dumping data. They
+    default to json.loads and json.dumps respectively.
+
+    loader should expect a string (and any optional arguments passed to
+    Section.load) and return a dictionary.
+    dumper should expect a dictionary (and any optional arguments passed to
+    Section.dump) and return a string.
     """
 
     option_order = []
@@ -84,6 +92,19 @@ class Section:
                 self.load()
             except NoFileError:
                 pass  # There is no filename.
+
+    def loader(self, *args, **kwargs):
+        """Should expect the string resulting from reading self.filename, and
+        return a dictionary. By default we use json.dumps, but you can override
+        this method to use any loader or dumper you want."""
+        return loads(*args, **kwargs)
+
+    def dumper(self, *args, **kwargs):
+        """Should expect a dictionary as returned by self.as_dictionary and
+        return a string suitable for writing to self.filename. By default we
+        use json.dumps, but you can override this method to use any system you
+        like."""
+        return dumps(*args, **kwargs)
 
     def add_option(self, name, thing, include=False):
         """Add thing as an option named name of this section. If include is
@@ -156,20 +177,20 @@ class Section:
         self._sections[name] = thing
         setattr(self, name, thing)
 
-    def load(self):
+    def load(self, *args, **kwargs):
         """Load configuration from disk."""
         if self.filename is None:
             raise NoFileError()  # Don't try and load anything.
         if isinstance(self.filename, six.string_types):
             if os.path.isfile(self.filename):
                 with open(self.filename, 'r') as f:
-                    json = f.read()
+                    data = f.read()
             else:
-                json = '{}'
-        else:
-            json = self.filename.read()
-        j = loads(json)
-        self.update(j)
+                return  # Nothing to do.
+        else:  # File-like object assumed.
+            data = self.filename.read()
+        d = self.loader(data, *args, **kwargs)
+        self.update(d)
 
     def update(
         self, data, ignore_missing_sections=True, ignore_missing_options=True
@@ -202,15 +223,15 @@ class Section:
             for s in self.children:
                 s.restore(True)
 
-    def json(self, full=False):
+    def as_dictionary(self, full=False):
         """Return this section as a dictionary If full evaluates to True,
         dump everything, not just anything that has changed."""
         sections = {}
         options = {}
         for name, section in self._sections.items():
-            j = section.json()
-            if j or full:
-                sections[name] = j
+            data = section.as_dictionary()
+            if data or full:
+                sections[name] = data
         for name, option in self._options.items():
             if option.value != option.default or full:
                 options[name] = option.value
@@ -221,16 +242,17 @@ class Section:
             stuff['options'] = options
         return stuff
 
-    def write(self, **kwargs):
-        """Write this section to disk if filename is provided. Pass all kwargs
-        to json.dump."""
+    def write(self, *args, **kwargs):
+        """Write this section to disk if filename is provided. Pass all args
+        and kwargs to self.dumper."""
         if self.filename is None:
             raise NoFileError()
+        data = self.dumper(self.as_dictionary(), *args, **kwargs)
         if isinstance(self.filename, six.string_types):
             with open(self.filename, 'w') as f:
-                dump(self.json(), f, **kwargs)
+                f.write(data)
         else:
-            dump(self.json(), self.filename, **kwargs)
+            self.filename.write(data)
 
     def get(self, option, default=None):
         """Get a config option."""
