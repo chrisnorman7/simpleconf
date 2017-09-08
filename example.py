@@ -63,27 +63,21 @@ class ConfigFrame(wx.Frame):
         )
         left_sizer.Add(self.tree, 1, wx.GROW)
         self.left_panel.SetSizerAndFit(left_sizer)
-        self.splitter.SplitHorizontally(
-            self.left_panel, self.make_right_panel()
-        )
+        p = wx.Panel(self.splitter)  # self.right_panel
+        s = wx.BoxSizer(wx.VERTICAL)
+        self.load = wx.Button(p, label='&Load')
+        self.load.Bind(wx.EVT_BUTTON, self.on_load)
+        s.Add(self.load, 1, wx.GROW)
+        self.save = wx.Button(p, label='&Save')
+        self.save.Bind(wx.EVT_BUTTON, self.on_save)
+        s.Add(self.save, 1, wx.GROW)
+        p.SetSizerAndFit(s)
+        self.right_panel = p
+        self.splitter.SplitHorizontally(self.left_panel, self.right_panel)
         self.root = self.tree.AddRoot('Options')
         self.tree.SetItemHasChildren(self.root)
-        for s in config.sections:
-            section = getattr(config, s)
+        for section in config.children:
             self.add_section(self.root, section)
-
-    def make_right_panel(self):
-        """Create a panel for the right hand side of the screen."""
-        p = wx.Panel(self.splitter)
-        s = wx.BoxSizer(wx.VERTICAL)
-        s.Add(
-            wx.StaticText(
-                p,
-                label='Select a configuration section to view the options'
-            ),
-            0, wx.GROW
-        )
-        return p
 
     def add_section(self, parent, section):
         """Recursively add a section to self.tree."""
@@ -91,19 +85,33 @@ class ConfigFrame(wx.Frame):
         if section.sections:
             self.tree.SetItemHasChildren(item)
         self.tree.SetItemData(item, section)
-        for name in section.sections:
-            self.add_section(item, getattr(section, name))
+        for subsection in section.children:
+            self.add_section(item, subsection)
 
     def on_change(self, event):
         item = event.GetItem()
         section = self.tree.GetItemData(item)
         old = self.splitter.GetWindow2()
         if section is None:
-            new = self.make_right_panel()
+            new = self.right_panel
+            new.Show(True)
+            if old is new:
+                return  # Nothing to do.
         else:
             new = SimpleConfWxPanel(section, self.splitter)
         self.splitter.ReplaceWindow(old, new)
-        old.Destroy()
+        if old is self.right_panel:
+            old.Hide()
+        else:
+            old.Destroy()
+
+    def on_load(self, event):
+        """Load configuration from disk."""
+        config.load()
+
+    def on_save(self, event):
+        """Save configuration to disk."""
+        config.write()
 
 
 # Now for showing the actual dialog:
