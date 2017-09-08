@@ -2,15 +2,13 @@
 This file contains the section class.
 """
 
-import os
-import os.path
-import six
 from inspect import isclass
 from json import loads, dumps
 from attr import attrs
 from .option import Option
 from .exceptions import NoSectionError, NoOptionError, NoFileError, \
      ValidationError
+from .filename import Filename
 
 
 @attrs(init=False)
@@ -57,6 +55,15 @@ class Section:
         Initialise the section.
 
         filename - Where this section should load it's data from (if anywhere).
+        You should either provide an instance of Filename or a string (which
+        will be passed to Filename).
+        Note: By default self.write and self.load run self.fix_filename before
+        they run to ensure that self.filename is an instance of Filename. If
+        you do not wish to use the Filename class you must either create your
+        own load and write methods, or else override fix_filename to use a
+        class better suited to your needs.
+        Just ensure this new class has read and write methods as well as a name
+        attribute.
         parent - The parent of this section.
         title - The friendly name of this section (will be used as the window
         title).
@@ -177,18 +184,20 @@ class Section:
         self._sections[name] = thing
         setattr(self, name, thing)
 
+    def fix_filename(self):
+        """Ensures self.filename is an instance of Filename."""
+        if not isinstance(self.filename, Filename):
+            self.filename = Filename(self.filename)
+
     def load(self, *args, **kwargs):
         """Load configuration from disk."""
-        if self.filename is None:
+        self.fix_filename()
+        if self.filename.name is None:
             raise NoFileError()  # Don't try and load anything.
-        if isinstance(self.filename, six.string_types):
-            if os.path.isfile(self.filename):
-                with open(self.filename, 'r') as f:
-                    data = f.read()
-            else:
-                return  # Nothing to do.
-        else:  # File-like object assumed.
+        if self.filename.exists():
             data = self.filename.read()
+        else:
+            return  # Nothing to do.
         d = self.loader(data, *args, **kwargs)
         self.update(d)
 
@@ -245,14 +254,11 @@ class Section:
     def write(self, *args, **kwargs):
         """Write this section to disk if filename is provided. Pass all args
         and kwargs to self.dumper."""
-        if self.filename is None:
+        self.fix_filename()
+        if self.filename.name is None:
             raise NoFileError()
         data = self.dumper(self.as_dictionary(), *args, **kwargs)
-        if isinstance(self.filename, six.string_types):
-            with open(self.filename, 'w') as f:
-                f.write(data)
-        else:
-            self.filename.write(data)
+        self.filename.write(data)
 
     def get(self, option, default=None):
         """Get a config option."""
