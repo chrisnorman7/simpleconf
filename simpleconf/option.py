@@ -33,7 +33,7 @@ class Option:
     def __attrs_post_init__(self):
         if isclass(self.validator):
             self.validator = self.validator()
-        self.value = self.default
+        self.set(self.default)
 
     def set(self, value):
         """Set self.value = value."""
