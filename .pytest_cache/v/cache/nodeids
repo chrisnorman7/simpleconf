@@ -1,0 +1,17 @@
+[
+  "tests/exception_test.py::test_message",
+  "tests/filename_test.py::test_defaults",
+  "tests/filename_test.py::test_with_file",
+  "tests/filename_test.py::test_with_filelike",
+  "tests/option_test.py::test_existing",
+  "tests/option_test.py::test_nonexisting",
+  "tests/option_test.py::test___str__",
+  "tests/section_test.py::test_setters",
+  "tests/section_test.py::test_attributes",
+  "tests/section_test.py::test_dump",
+  "tests/section_test.py::test_validate",
+  "tests/section_test.py::test___str__",
+  "tests/section_test.py::test_add_section",
+  "tests/section_test.py::test_add_option",
+  "tests/validation_test.py::test_validators"
+]

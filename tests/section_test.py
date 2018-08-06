@@ -3,7 +3,7 @@
 import os
 import os.path
 from pytest import raises
-from simpleconf import Section, Option, validators, exceptions
+from simpleconf2 import Section, Option, validators, exceptions
 
 user_name = 'Joseph Test'
 dog_name = 'Jimmy'

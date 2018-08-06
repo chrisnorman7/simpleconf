@@ -1,6 +1,6 @@
 """Test validators."""
 
-from simpleconf import validators, Option
+from simpleconf2 import validators, Option
 from inspect import isclass
 from warnings import warn
 

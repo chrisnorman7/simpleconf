@@ -2,7 +2,7 @@
 
 import os.path
 from io import StringIO
-from simpleconf.filename import Filename
+from simpleconf2.filename import Filename
 
 
 def test_defaults():

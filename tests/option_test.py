@@ -1,6 +1,6 @@
 """Test options."""
 
-from simpleconf import Section, Option, exceptions
+from simpleconf2 import Section, Option, exceptions
 from pytest import raises
 
 

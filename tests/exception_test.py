@@ -1,6 +1,6 @@
 """Test exceptions."""
 
-from simpleconf import exceptions
+from simpleconf2 import exceptions
 
 
 def test_message():

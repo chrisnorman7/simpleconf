@@ -1,0 +1,45 @@
+CHANGES
+=======
+
+* Use self.set rather than setting self.value directly
+* Use the Filename class for section filenames
+* Added the ability to use custom loaders and dumper
+* Added load and save buttons
+* Updated example to use a tree view
+* Code style fixes and use attrs
+* Updated to version 1.0
+
+1.0.0
+-----
+
+* Squashed that bug!
+* Woops..
+* Really fixed the bug this time
+* Fixed a bug where setting values would not work with specific controls
+* Bumped the version
+* Each validator now has it's own test method which is ran by the test suite
+* Added regexp, list and dictionary validators
+* Now add option to option\_order if inclue is True
+* Updated the docstring for Section.write
+* Added a QuickValidator class which can be passed a lambda to restore old confmanager functionality
+* Added a load argument to Section.\_\_init\_\_ so that loading can be surpressed
+* Refined Option.\_\_str\_\_
+* Saved a line of code and added a \_\_repr\_\_ method to Option
+* Add more tests and have stricter type-checking
+* Reduced extra data from setup.cfg
+* Switched to using pbr for setup
+* Fixed an oversite in tests and a bug which meant TypeError was raised instead of NoOptionError
+* Now extract version from simpleconf itself
+* Added full argument to Section.json to make minimal dump optional
+* Now only dump what is necessary
+* Now use an OrderedDict for control\_types
+* Made the OK button the default button in SimpleConfWxDialog
+* Made SimpleConfWXDialog.on\_ok return True to signify success
+* Add a visible attribute to Section objects
+* Added validation to SimpleConfWXDialog
+* Made SimpleConfWXDialog.control\_types more extensible
+* Added setup.py
+* Added a wx dialog and example (incomplete)
+* Use String as the default validator
+* Backend now works
+* Initial commit
