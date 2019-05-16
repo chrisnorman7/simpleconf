@@ -19,6 +19,6 @@ def test_validators():
             o.validator = validator
             try:
                 validator.test(o)
-            except Exception as e:
+            except Exception:
                 warn('Exception found in method test of %r.' % validator)
                 raise
