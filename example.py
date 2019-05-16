@@ -6,8 +6,8 @@ see how it should be done.
 """
 
 import wx
-from simpleconf import Section, Option, validators
-from simpleconf.dialogs.wx import SimpleConfWxPanel
+from simpleconf2 import Section, Option, validators
+from simpleconf2.dialogs.wx import SimpleConfWxPanel
 
 
 class Config(Section):
