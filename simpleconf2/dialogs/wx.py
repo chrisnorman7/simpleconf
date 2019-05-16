@@ -5,11 +5,9 @@ Any future dialogs will be kept in this directory for convenience.
 """
 
 import wx
-import six
 from wx.lib.sized_controls import SizedPanel
 from wx.lib.agw.floatspin import FloatSpin
 from wx.lib.intctrl import IntCtrl
-from collections import OrderedDict
 from ..validators import ValidationError
 
 
@@ -18,18 +16,16 @@ class SimpleConfWxPanel(SizedPanel):
 
     def __init__(self, section, *args, **kwargs):
         """Construct a frame from the provided section."""
-        self.control_types = OrderedDict()
+        self.control_types = {}
         self.control_types[bool] = lambda option, window: wx.CheckBox(window)
         self.control_types[int] = lambda option, window: IntCtrl(window)
-        self.control_types[
-            six.string_types
-        ] = lambda option, window: wx.TextCtrl(window)
+        self.control_types[str] = lambda option, window: wx.TextCtrl(window)
         self.control_types[
             float
         ] = lambda option, window: FloatSpin(window, digits=2)
         self.section = section
         # name:control pairs for all the controls on this form:
-        self.controls = OrderedDict()
+        self.controls = {}
         super(SimpleConfWxPanel, self).__init__(*args, **kwargs)
         self.SetSizerType('Form')
         for option in section.option_order:
@@ -48,11 +44,8 @@ class SimpleConfWxPanel(SizedPanel):
                     )
             else:
                 c = option.control(option, self)
-            try:
-                if not isinstance(c, IntCtrl):
-                    c.SetLabel(option.get_title())
-            except (AttributeError, NameError):
-                pass  # Not possible with this control.
+            if isinstance(c, (wx.CheckBox, wx.Button)):
+                c.SetLabel(option.get_title())
             c.SetValue(option.value)
             self.controls[option.name] = c
         self.ok = wx.Button(self, label='&OK')
@@ -75,9 +68,8 @@ class SimpleConfWxPanel(SizedPanel):
                 self.on_error(e.message)
                 control.SetFocus()
                 return False
-        else:
-            # Signal to any overriding methods that we exited correctly:
-            return True
+        # Signal to any overriding methods that we exited correctly:
+        return True
 
 
 class SimpleConfWxParentFriendlyPanel(SimpleConfWxPanel):
@@ -85,7 +77,7 @@ class SimpleConfWxParentFriendlyPanel(SimpleConfWxPanel):
     Also binds EVT_BUTTON to self.cancel to call self.parent.on_cancel."""
 
     def __init__(self, section, parent, *args, **kwargs):
-        super(SimpleConfWxParentFriendlyPanel, self).__init__(
+        super().__init__(
             section, parent, *args, **kwargs
         )
         self.parent = parent
